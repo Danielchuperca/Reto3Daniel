@@ -7,6 +7,7 @@ import java.sql.Statement;
 
 import clases.Clientes;
 import util.Conexion;
+import util.Funciones;
 
 public class ClientesDAO {
 	public static void inserta(Clientes clien)
@@ -54,7 +55,28 @@ public class ClientesDAO {
 			Conexion.cierraConexion();
 		}
 	}
-	public static void actualizarCliente() {
-		
+	public static void actualizarCliente(Clientes clien) {
+		try {
+			//abro conexion
+			Connection con = Conexion.abreConexion();
+			//genero el sql
+			PreparedStatement pst = con.prepareStatement("update clientes set nombre=?, direccion=?, codigo=? where idCliente =?");
+			pst.setString(1,clien.getNombre());
+			
+			pst.setString(2,clien.getDireccion());
+			pst.setInt(3, clien.getCodigo());
+			pst.execute();
+			ResultSet rs = pst.getGeneratedKeys();
+			if(rs.next())
+				clien.setIdCliente(rs.getInt(1));
+			rs.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		finally {
+			Conexion.cierraConexion();
+		}
+
 	}
 }
+
