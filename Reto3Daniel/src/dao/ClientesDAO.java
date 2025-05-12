@@ -35,4 +35,26 @@ public class ClientesDAO {
 			Conexion.cierraConexion();
 		}
 	}
+	public static void buscarCodigo(int codigo) {
+		try {
+			//abro conexion
+			Connection con = Conexion.abreConexion();
+			//creo select
+			PreparedStatement pst = con.prepareStatement("select * from clientes where codigo=?;");
+			pst.setInt(1,codigo);
+			pst.execute();
+			//recupero clave
+			ResultSet rs = pst.getGeneratedKeys();
+			
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		finally {
+			Conexion.cierraConexion();
+		}
+	}
+	public static void actualizarCliente() {
+		
+	}
 }
