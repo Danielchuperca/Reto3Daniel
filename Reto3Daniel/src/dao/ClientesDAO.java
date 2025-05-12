@@ -27,6 +27,7 @@ public class ClientesDAO {
 			if(rs.next())
 				clien.setIdCliente(rs.getInt(1));
 			rs.close();
+			
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
