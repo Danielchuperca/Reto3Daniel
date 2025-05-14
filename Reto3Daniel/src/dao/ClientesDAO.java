@@ -36,16 +36,20 @@ public class ClientesDAO {
 			Conexion.cierraConexion();
 		}
 	}
-	public static void buscarCodigo(int codigo) {
+	public static Clientes buscarCodigo(int codigo) {
+		Clientes c=null;
 		try {
 			//abro conexion
 			Connection con = Conexion.abreConexion();
 			//creo select
-			PreparedStatement pst = con.prepareStatement("select * from clientes where codigo=?;");
+			PreparedStatement pst = con.prepareStatement("select * from clientes where codigo=?");
 			pst.setInt(1,codigo);
-			pst.execute();
-			//recupero clave
-			ResultSet rs = pst.getGeneratedKeys();
+			ResultSet rs = pst.executeQuery();
+			
+			if(rs.next()) {
+				c=new Clientes(rs.getInt("idCliente"),rs.getString("nombre"),rs.getString("direccion"),rs.getInt("codigo"));
+			}
+			
 			
 			
 		} catch (Exception e) {
@@ -54,22 +58,20 @@ public class ClientesDAO {
 		finally {
 			Conexion.cierraConexion();
 		}
+		return c;
 	}
-	public static void actualizarCliente(Clientes clien) {
+	public static void actualizarCliente(Clientes clien, int cod) {
 		try {
 			//abro conexion
 			Connection con = Conexion.abreConexion();
 			//genero el sql
-			PreparedStatement pst = con.prepareStatement("update clientes set nombre=?, direccion=?, codigo=? where idCliente =?");
+			PreparedStatement pst = con.prepareStatement("update clientes set nombre=?, direccion=? where codigo =?");
 			pst.setString(1,clien.getNombre());
-			
 			pst.setString(2,clien.getDireccion());
-			pst.setInt(3, clien.getCodigo());
-			pst.execute();
-			ResultSet rs = pst.getGeneratedKeys();
-			if(rs.next())
-				clien.setIdCliente(rs.getInt(1));
-			rs.close();
+			pst.setInt(3, cod);
+			
+			
+			
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

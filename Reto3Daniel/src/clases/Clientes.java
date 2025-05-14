@@ -15,6 +15,13 @@ public class Clientes {
 		this.direccion = direccion;
 		this.codigo = codigo;
 	}
+	
+	public Clientes(String nombre, String direccion, int codigo) {
+		super();
+		this.nombre = nombre;
+		this.direccion = direccion;
+		this.codigo = codigo;
+	}
 	public int getIdCliente() {
 		return idCliente;
 	}

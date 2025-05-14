@@ -24,6 +24,13 @@ public class Productos {
 		this.talla = talla;
 		this.stock = stock;
 	}
+	
+	public Productos(String nombre, String color, String talla) {
+		super();
+		this.nombre = nombre;
+		this.color = color;
+		this.talla = talla;
+	}
 	public int getIdProducto() {
 		return idProducto;
 	}
