@@ -1,5 +1,6 @@
 package dao;
 
+import java.sql.CallableStatement;
 import java.sql.Connection;
 
 import java.sql.PreparedStatement;
@@ -36,23 +37,23 @@ public class productosDAO {
 		
 		}
 	
-	public static Productos buscarProdu(Productos prod) {
-		Productos pro=null;
-		Categorias cat=null;
+	public static void buscarProdu(Productos prod) {
+		
 		try {
 			//abro conexion
 			Connection con = Conexion.abreConexion();
 			//creo select
-			PreparedStatement pst = con.prepareStatement("select * from productos where nombre=? or talla=? or color=?;");
-			pst.setString(1,prod.getNombre());
-			pst.setString(2,prod.getTalla());
-			pst.setString(3, prod.getColor());
-			pst.execute();
-			//recupero clave
-			ResultSet rs = pst.executeQuery();
-			if(rs.next()) {
-				pro=new Productos(rs.getInt("idProducto"),cat,rs.getString("nombre"),rs.getInt("precio"),rs.getString("descripcion"),rs.getString("color"),rs.getString("talla"),rs.getInt("stock"));
-			}
+			CallableStatement cs = con.prepareCall("CALL buscarProducto(?,?,?)");
+			// Se proporcionan valores de entrada al procedimiento
+			cs.setString(1, prod.getNombre());
+			//el segundo parámetro es de salida
+			cs.setString(2, prod.getTalla());
+			cs.setString(3, prod.getColor());
+			cs.execute();
+
+			//para recuperar el parámetro de salida
+			
+			
 			
 			
 		} catch (Exception e) {
@@ -61,7 +62,7 @@ public class productosDAO {
 		finally {
 			Conexion.cierraConexion();
 		}
-		return pro;
+		
 	}
 
 	
