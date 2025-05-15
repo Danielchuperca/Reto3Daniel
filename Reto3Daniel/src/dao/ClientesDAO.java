@@ -60,17 +60,18 @@ public class ClientesDAO {
 		}
 		return c;
 	}
-	public static void actualizarCliente(Clientes clien, int cod) {
+	public static void actualizarCliente(Clientes clien) {
 		try {
 			//abro conexion
 			Connection con = Conexion.abreConexion();
 			//genero el sql
-			PreparedStatement pst = con.prepareStatement("update clientes set nombre=?, direccion=? where codigo =?");
+			PreparedStatement pst = con.prepareStatement("update clientes set nombre=?, direccion=?, codigo=? where idcliente =?");
 			pst.setString(1,clien.getNombre());
 			pst.setString(2,clien.getDireccion());
-			pst.setInt(3, cod);
+			pst.setInt(3, clien.getCodigo());
+			pst.setInt(4, clien.getIdCliente());
 			
-			
+			pst.execute();
 			
 		} catch (Exception e) {
 			e.printStackTrace();
