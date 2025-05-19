@@ -26,26 +26,34 @@ public class Main {
 				break;
 			
 		case 2:
-			    List<Productos> listaProd = productosDAO.listaProd();
-			    for (Productos prod : listaProd) {
-					System.out.println(prod);
-				}
-				String nombre=util.Funciones.dimeString("dime el nombre del producto que quieres", sc);
-				String talla=util.Funciones.dimeString("dime la talla del producto que quieres", sc);
-				String color=util.Funciones.dimeString("dime el color que quieres del producto", sc);
-				Productos prod=new Productos(nombre,talla,color);
-				if(prod.getNombre().equals(nombre)||prod.getTalla().equals(talla)||prod.getColor().equals(color)) {
-				System.out.println(dao.productosDAO.buscarProdu(prod)); 
-				}
-				else {
-				System.out.println(dao.productosDAO.buscarProdu(prod));
-				}
+			submenu2(sc); 
 		case 3:
 		
 		case 4:
 
 		}
 
+	}
+
+	private static void submenu2(Scanner sc) {
+	
+		List<Productos> listaProd = productosDAO.listaProd();
+		for (Productos prod : listaProd) {
+			System.out.println(prod);
+		}
+		System.out.println("dime el nombre del producto que quieres");
+		String nombre=sc.nextLine();
+		System.out.println("dime el color del producto que quieres");
+		String talla=sc.nextLine();
+		System.out.println("dime la talla que quieres del producto");
+		String color=sc.nextLine();
+		Productos prod=new Productos(nombre,color,talla);
+		
+		List<Productos> listaProd2 = productosDAO.buscarProdu(prod);
+		for (Productos prod1 : listaProd2) {
+			System.out.println(prod1);
+		}
+		//System.out.println(dao.productosDAO.buscarProdu(prod));
 	}
 
 	private static void submenu1(Scanner sc) {
