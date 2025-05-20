@@ -6,6 +6,14 @@ public class PedidoProducto {
 	private Productos idProductos;
 	private int unidades;
 	private double precio;
+	
+	public PedidoProducto(Pedidos idPedido, Productos idProductos, int unidades, double precio) {
+		super();
+		this.idPedido = idPedido;
+		this.idProductos = idProductos;
+		this.unidades = unidades;
+		this.precio = precio;
+	}
 	public PedidoProducto() {
 		super();
 	}
@@ -17,6 +25,7 @@ public class PedidoProducto {
 		this.unidades = unidades;
 		this.precio = precio;
 	}
+	
 	public int getIdPedidoProducto() {
 		return idPedidoProducto;
 	}
