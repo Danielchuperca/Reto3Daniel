@@ -11,6 +11,7 @@ import clases.PedidoProducto;
 import clases.Pedidos;
 import clases.Productos;
 import dao.ClientesDAO;
+import dao.PedidoDAO;
 import dao.PedidoProductoDAO;
 import dao.productosDAO;
 
@@ -38,7 +39,6 @@ public class Main {
 				break;
 			case 3:
 				Clientes clien2 = null;
-				Productos prod = null;
 				Pedidos pedi = null;
 				do {
 					int cod = util.Funciones.dimeEntero("dime el codigo que quieres que busque", sc);
@@ -55,16 +55,34 @@ public class Main {
 				for (Productos produ : listaProd) {
 					System.out.println(produ);
 				}
+				
 				do {
 					
 					nomProd = util.Funciones.dimeString("dime nombres de productos hasta poner fin", sc);
-					if (nomProd == prod.getNombre()) {
+					if (verificarProd(nomProd)==true) {
 						int cantProd= util.Funciones.dimeEntero("dime la cantidad de ese producto que quieres", sc);
-						PedidoProducto pedProd = new PedidoProducto(pedi,prod,cantProd,prod.getPrecio());
+						Productos prod =productosDAO.buscarNombre(nomProd);
+						
+						double sum=cantProd*prod.getPrecio();
+						PedidoProducto pedProd = new PedidoProducto(pedi,prod,cantProd,sum);
 						PedidoProductoDAO.inserta(pedProd, pedi, prod);
 					}
+					else {
+						System.out.println("no has introducido ningun producto");
+					}
+					
 					
 				} while (!(nomProd.equals("fin")));
+				System.out.println(pedi);
+				String direc=util.Funciones.dimeString("Quieres usar esta direccion de envio=si/no", sc);
+				if(direc.equals("no")) {
+					double precioTotalAct=PedidoDAO.actualizarPrecioTotal(pedi);
+					String nuevaDirec=util.Funciones.dimeString("dime la nueva direccion", sc);
+					pedi.setDireccionEnvio(nuevaDirec) ;
+					pedi.setPrecioTotal(precioTotalAct);
+					PedidoDAO.insertaPedidos(pedi, clien2);
+				}
+			
 
 			case 4:
 
@@ -72,11 +90,21 @@ public class Main {
 		} while (num != 0);
 	}
 
+	private static boolean verificarProd(String nombre) {
+		List<Productos> listaProd = productosDAO.listaProd();
+		for (Productos produ : listaProd) {
+			if(produ.getNombre().equals(nombre)) {
+				return true;
+			}
+		}
+		return false;
+	}
+
 	private static void submenu2(Scanner sc) {
 
 		List<Productos> listaProd = productosDAO.listaProd();
-		for (Productos prod : listaProd) {
-			System.out.println(prod);
+		for (Productos produ : listaProd) {
+			System.out.println(produ);
 		}
 		System.out.println("dime el nombre del producto que quieres");
 		String nombre = sc.nextLine();

@@ -22,12 +22,12 @@ public class productosDAO {
 		try(Connection con = Conexion.abreConexion())
 		{
 			Statement stmt = con.createStatement();
-			ResultSet rs = stmt.executeQuery("select idproducto, cat.idcategoria,cat.nombre, prod.nombre, precio, descripcion, color, talla, stock from productos prod\r\n"
+			ResultSet rs = stmt.executeQuery("select idproducto, cat.idcategoria,cat.nombre as nombreCategoria, prod.nombre, precio, descripcion, color, talla, stock from productos prod\r\n"
 					+ "inner join categorias cat on prod.idcategoria = cat.idcategoria\r\n"
 					+ "order by idproducto;");
 			while(rs.next())
 			{
-				Categorias cate=new Categorias(rs.getInt("idCategoria"),rs.getString("nombre"));
+				Categorias cate=new Categorias(rs.getInt("idCategoria"),rs.getString("nombreCategoria"));
 				lista.add(new Productos(rs.getInt("IdProducto"),cate,rs.getString("nombre"),rs.getInt("precio"),rs.getString("descripcion"),rs.getString("color"),rs.getString("talla"),rs.getInt("stock")));
 			}
 		
@@ -75,6 +75,33 @@ public class productosDAO {
 		}
 		return lisProd;
 		
+	}
+	public static Productos buscarNombre(String nombre) {
+		Productos p=null;
+		try {
+			//abro conexion
+			Connection con = Conexion.abreConexion();
+			//creo select
+			PreparedStatement pst = con.prepareStatement("select * from productos where nombre like ?;");
+			pst.setString(1,nombre);
+			ResultSet rs = pst.executeQuery();
+			
+			if(rs.next()) {
+				Categorias cate=new Categorias(rs.getInt("idCategoria"),rs.getString("nombre"));
+				p=new Productos(rs.getInt("IdProducto"),cate,rs.getString("nombre"),rs.getDouble("precio"),rs.getString("descripcion"),
+						rs.getString("color"),rs.getString("talla"),rs.getInt("stock"));
+				System.out.println("hola"+p);
+			}
+			
+			
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		finally {
+			Conexion.cierraConexion();
+		}
+		return p;
 	}
 
 	

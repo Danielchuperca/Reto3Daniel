@@ -17,7 +17,7 @@ public class PedidoProductoDAO {
 			//abro conexion
 			Connection con = Conexion.abreConexion();
 			//creo select
-			PreparedStatement pst = con.prepareStatement("insert into pedidoproductos (idpedido, idproducto,unidades,precio) values (?,?,?,?);",Statement.RETURN_GENERATED_KEYS);
+			PreparedStatement pst = con.prepareStatement("insert into pedidoproducto (idpedido, idproducto,unidades,precio) values (?,?,?,?);",Statement.RETURN_GENERATED_KEYS);
 			
 			pst.setInt(1, ped.getIdPedido() );
 			pst.setInt(2, prod.getIdProducto() );
@@ -37,5 +37,25 @@ public class PedidoProductoDAO {
 			Conexion.cierraConexion();
 		}
 		return pe;
+	}
+	public static void sumatorioPrecioProd(PedidoProducto pediProd) {
+		try {
+			//abro conexion
+			Connection con = Conexion.abreConexion();
+			//genero el sql
+			PreparedStatement pst = con.prepareStatement("select sum(precio) from pedidoproducto where idpedido=? group by idpedido;");
+			pst.setInt(1,pediProd.getIdPedidoProducto());
+			
+			
+			
+			pst.execute();
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		finally {
+			Conexion.cierraConexion();
+		}
+
 	}
 }
